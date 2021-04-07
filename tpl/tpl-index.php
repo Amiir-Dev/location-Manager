@@ -59,6 +59,14 @@
                                 <?php endforeach; ?>
                             </select>
                         </div>
+                        <div >
+                            <div class="field-content" style=" margin: 5px 200px 0 0">
+                                نام شما <input type="text" name="user_name" id='u-name' style="width : 200px; margin-left:30px">
+                                ایمیل شما <input type="email" name="user_email" id='u-email' style="width : 200px">
+                            </div>
+                        </div>
+
+
                     </div>
                     <div class="field-row">
                         <div class="field-title">ذخیره نهایی</div>

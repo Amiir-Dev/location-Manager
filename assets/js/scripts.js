@@ -26,6 +26,10 @@ map.on('dblclick', function(event) {
 
     $('#l-title').val('');
     $('#l-title').val('');
+
+    $('#u-name').val('');
+    $('#u-email').val('');
+
     $('.ajax-result').html('');
 });
 

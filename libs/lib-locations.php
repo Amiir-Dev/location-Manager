@@ -1,10 +1,19 @@
 <?php
 
-function insertLocation($data){
+function insertLocation($data, $userID){
     global $pdo;
-    $sql = "INSERT INTO locations (title,lat, lng, type) VALUES (:title, :lat, :lng, :typ);";
+    # Prevent duplicate insertion
+    $sql = "SELECT COUNT(*) FROM locations WHERE lat LIKE :lat and lng LIKE :lng";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([':title'=>$data['title'], ':lat'=>$data['lat'], ':lng'=>$data['lng'], ':typ'=>$data['type']]);
+    $stmt->execute([':lat' => $data['lat'], ':lng' => $data['lng']]);
+    $stmt->fetch();
+    if($stmt->rowCount()){
+        die("موقعیت موردنظر قبلا ارسال شده است");
+    }
+
+    $sql = "INSERT INTO locations (user_id, title,lat, lng, type) VALUES (:user_id, :title, :lat, :lng, :typ);";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':user_id'=>$userID, ':title'=>$data['title'], ':lat'=>$data['lat'], ':lng'=>$data['lng'], ':typ'=>$data['type']]);
     return $stmt->rowCount();
 }
 
