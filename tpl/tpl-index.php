@@ -59,7 +59,7 @@
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                        <div >
+                        <div>
                             <div class="field-content" style=" margin: 5px 200px 0 0">
                                 نام شما <input type="text" name="user_name" id='u-name' style="width : 200px; margin-left:30px">
                                 ایمیل شما <input type="email" name="user_email" id='u-email' style="width : 200px">
@@ -86,6 +86,31 @@
         <?php if ($location) : ?>
             L.marker([<?= $location->lat ?>, <?= $location->lng ?>]).addTo(map).bindPopup("ّ<?= $location->title ?>").openPopup();
         <?php endif; ?>
+
+        map.on('moveend', function() {
+            const windowNorth = map.getBounds().getNorth();
+            const windowSouth = map.getBounds().getSouth();
+            const windowEast = map.getBounds().getEast();
+            const windowWest = map.getBounds().getWest();
+            // alert('windowNorth: ' + windowNorth + 'windowEast: ' + windowEast);
+
+            $.ajax({
+                url: '<?= BASE_URL . 'process/currentLocations.php' ?>',
+                method: 'POST',
+                data: {
+                    wn: windowNorth,
+                    ws: windowSouth,
+                    we: windowEast,
+                    ww: windowWest,
+                },
+                success: function(response) {
+                    $locations = response;
+                    console.log($locations);
+                    // $locations.foreach(L.marker([$locations.lat, $locations.lng]).addTo(map).bindPopup("$locations.title").openPopup());
+                }
+            });
+
+        });
 
 
         $(document).ready(function() {
