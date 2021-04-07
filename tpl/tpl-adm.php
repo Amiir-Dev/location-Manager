@@ -64,6 +64,10 @@ use Hekmatinasser\Verta\Verta;
             background: #0c8f10;
             color: #ffffff;
         }
+        .statusToggle.all {
+            background: #007bec;
+            color: #ffffff;
+        }
 
         .statusToggle:hover,
         button.preview:hover {
@@ -106,6 +110,7 @@ use Hekmatinasser\Verta\Verta;
         <h1>پنل مدیریت <span style="color:#007bec">مدیریت نقشه</span></h1>
         <div class="box">
             <a class="statusToggle" href="<?= BASE_URL ?>" target="_blank">🏠</a>
+            <a class="statusToggle all" href="<?= BASE_URL ?>/adm.php">همه</a>
             <a class="statusToggle active" href="?verified=1">فعال</a>
             <a class="statusToggle" href="?verified=0">غیرفعال</a>
             <a class="statusToggle" href="?logout=1" style="float:left">خروج</a>
@@ -182,8 +187,7 @@ use Hekmatinasser\Verta\Verta;
                     }
                 });
             });
-
-
+            
             $('.modal-overlay .close').click(function() {
                 $('.modal-overlay').fadeOut();
             });

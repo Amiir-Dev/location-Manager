@@ -19,7 +19,11 @@
 <body>
     <div class="main">
         <div class="head">
-            <input type="text" id="search" placeholder="دنبال کجا میگردی؟">
+            <div class="search-box">
+                <input type="text" id="search" placeholder="دنبال کجا می گردی؟" autocomplete="none">
+                <div class="clear"></div>
+                <div class="search-results" style="display: none;"></div>
+            </div>
         </div>
         <div class="mapContainer">
             <div id="map"></div>
@@ -32,7 +36,7 @@
             <span class="close">x</span>
             <h3 class="modal-title">ثبت لوکیشن</h3>
             <div class="modal-content">
-                <form id='addLocationForm' action="<?= site_url("process/addLocation.php")?>" method="post">
+                <form id='addLocationForm' action="<?= site_url("process/addLocation.php") ?>" method="post">
                     <div class="field-row">
                         <div class="field-title">مختصات</div>
                         <div class="field-content">
@@ -71,14 +75,32 @@
     <script src="<?= site_url("assets/js/jquery.min.js") ?>"></script>
     <script src="<?= site_url("assets/js/scripts.js") ?>"></script>
     <script>
-        <?php if($location):?>
-            L.marker([<?=$location->lat?>, <?=$location->lng?>]).addTo(map).bindPopup("ّ<?=$location->title?>").openPopup();
+        <?php if ($location) : ?>
+            L.marker([<?= $location->lat ?>, <?= $location->lng ?>]).addTo(map).bindPopup("ّ<?= $location->title ?>").openPopup();
         <?php endif; ?>
 
 
-        $(document).ready(function(){
-            $('img.currentLoc').click(function(){
+        $(document).ready(function() {
+            $('img.currentLoc').click(function() {
                 locate();
+            });
+
+            $('input#search').keyup(function() {
+                const input = $(this);
+                const searchResult = $('.search-results');
+                searchResult.html('در حال جستجو ...');
+                $.ajax({
+                    url: '<?= BASE_URL . 'process/search.php' ?>',
+                    method: 'POST',
+                    data: {
+                        keyword: input.val()
+                    },
+                    success: function(response) {
+                        if (response) {
+                            searchResult.slideDown().html(response);
+                        }
+                    }
+                });
             });
         });
     </script>

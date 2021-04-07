@@ -15,6 +15,9 @@ function getLocations($params){
     if(isset($params['verified']) and in_array($params['verified'], ['0', '1'])){
         $condition = "WHERE verified = {$params['verified']}";
     }
+    else if(isset($params['keyword'])){
+        $condition = "WHERE verified = 1 and title LIKE '%{$params['keyword']}%'";
+    }
     $sql = "SELECT * FROM locations $condition";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
