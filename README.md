@@ -12,5 +12,7 @@ This project also has the following features:
   * See the priview of locations in the form of ifram in control panel
   * (Enable / Disable) locations for display for all users
   * Ajax Search for available locations
-  * 
+  * Get user data (name & email) and check if user exist get the user id and if user not-exist, add user and get user id
+  * Add locations with related userID in the database
+  * Check during add locations to prevent add duplicate location
 
