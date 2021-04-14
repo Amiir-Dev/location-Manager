@@ -87,29 +87,28 @@
             L.marker([<?= $location->lat ?>, <?= $location->lng ?>]).addTo(map).bindPopup("ّ<?= $location->title ?>").openPopup();
         <?php endif; ?>
 
-        map.on('moveend', function() {
-            const windowNorth = map.getBounds().getNorth();
-            const windowSouth = map.getBounds().getSouth();
-            const windowEast = map.getBounds().getEast();
-            const windowWest = map.getBounds().getWest();
-            // alert('windowNorth: ' + windowNorth + 'windowEast: ' + windowEast);
 
+        var windowNorth = map.getBounds().getNorth();
+        var windowSouth = map.getBounds().getSouth();
+        var windowEast = map.getBounds().getEast();
+        var windowWest = map.getBounds().getWest();
+
+        map.on('move', function() {
             $.ajax({
                 url: '<?= BASE_URL . 'process/currentLocations.php' ?>',
                 method: 'POST',
                 data: {
-                    wn: windowNorth,
-                    ws: windowSouth,
-                    we: windowEast,
-                    ww: windowWest,
+                    wn: map.getBounds().getNorth(),
+                    ws: map.getBounds().getSouth(),
+                    we: map.getBounds().getEast(),
+                    ww: map.getBounds().getWest(),
                 },
                 success: function(response) {
-                    $locations = response;
-                    console.log($locations);
-                    // $locations.foreach(L.marker([$locations.lat, $locations.lng]).addTo(map).bindPopup("$locations.title").openPopup());
+                    let locations = response;
+                    console.log(locations);
+                    // locations.foreach(L.marker([locations.lat, locations.lng]).addTo(map).bindPopup(locations.title).openPopup());
                 }
             });
-
         });
 
 

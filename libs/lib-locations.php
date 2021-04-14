@@ -53,8 +53,8 @@ function toggleStatus($id){
 
 function getWindowLocations($n, $s, $e, $w){
     global $pdo;
-    $sql = "SELECT * FROM locations WHERE  lat >= $s and lat <= $n and lng <= $e and lng >= $w";
+    $sql = "SELECT * FROM locations WHERE (lng <= :east AND lng >= :west) AND (lat <= :north AND lat >= :south)";
     $stmt = $pdo->prepare($sql);
-$stmt->execute();
+    $stmt->execute([':south' => $s, ':north' => $n,':east' => $e, ':west' => $w]);
     return $stmt->fetchAll(PDO::FETCH_OBJ);
 }
