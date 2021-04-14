@@ -16,7 +16,7 @@
 </head>
 
 
-<body>
+<body onload="completeLoad()">
     <div class="main">
         <div class="head">
             <div class="search-box">
@@ -87,13 +87,12 @@
             L.marker([<?= $location->lat ?>, <?= $location->lng ?>]).addTo(map).bindPopup("ّ<?= $location->title ?>").openPopup();
         <?php endif; ?>
 
-
         var windowNorth = map.getBounds().getNorth();
         var windowSouth = map.getBounds().getSouth();
         var windowEast = map.getBounds().getEast();
         var windowWest = map.getBounds().getWest();
 
-        map.on('move', function() {
+        map.on('moveend', function() {
             $.ajax({
                 url: '<?= BASE_URL . 'process/currentLocations.php' ?>',
                 method: 'POST',
@@ -104,12 +103,33 @@
                     ww: map.getBounds().getWest(),
                 },
                 success: function(response) {
-                    let locations = response;
-                    console.log(locations);
-                    // locations.foreach(L.marker([locations.lat, locations.lng]).addTo(map).bindPopup(locations.title).openPopup());
+                    let locations = JSON.parse(response);
+                    locations.forEach(function(value, index) {
+                        L.marker([value.lat, value.lng]).addTo(map).bindPopup(value.title);
+                    });
                 }
             });
         });
+
+        function completeLoad() {
+            $.ajax({
+                url: '<?= BASE_URL . 'process/currentLocations.php' ?>',
+                method: 'POST',
+                data: {
+                    wn: map.getBounds().getNorth(),
+                    ws: map.getBounds().getSouth(),
+                    we: map.getBounds().getEast(),
+                    ww: map.getBounds().getWest(),
+                },
+                success: function(response) {
+                    let locations = JSON.parse(response);
+                    locations.forEach(function(value, index) {
+                        L.marker([value.lat, value.lng]).addTo(map).bindPopup(value.title);
+                    });
+                }
+            });
+        }
+
 
 
         $(document).ready(function() {
